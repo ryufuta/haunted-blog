@@ -7,8 +7,6 @@ class Blog < ApplicationRecord
 
   validates :title, :content, presence: true
 
-  before_validation ->(blog) { blog.random_eyecatch = false unless blog.user.premium }
-
   scope :published, -> { where('secret = FALSE') }
 
   scope :search, lambda { |term|
