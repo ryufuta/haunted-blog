@@ -14,7 +14,7 @@ class Blog < ApplicationRecord
   }
 
   scope :accessible, lambda { |target_user|
-    where(user: target_user).or(where(secret: false))
+    where(user: target_user).or(published)
   }
 
   scope :default_order, -> { order(id: :desc) }
