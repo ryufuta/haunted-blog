@@ -30,7 +30,10 @@ class BlogsController < ApplicationController
   end
 
   def update
-    if @blog.update(blog_params)
+    params_for_update = blog_params
+    params_for_update[:random_eyecatch] = false if !current_user.premium && !@blog.random_eyecatch && blog_params[:random_eyecatch]
+
+    if @blog.update(params_for_update)
       redirect_to blog_url(@blog), notice: 'Blog was successfully updated.'
     else
       render :edit, status: :unprocessable_entity
@@ -50,8 +53,6 @@ class BlogsController < ApplicationController
   end
 
   def blog_params
-    permitted_params = params.require(:blog).permit(:title, :content, :secret, :random_eyecatch)
-    permitted_params[:random_eyecatch] = false if permitted_params[:random_eyecatch] && !current_user.premium
-    permitted_params
+    params.require(:blog).permit(:title, :content, :secret, :random_eyecatch)
   end
 end
